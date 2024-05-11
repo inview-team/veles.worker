@@ -1,19 +1,30 @@
 package job_usecases
 
-import "worker/internal/domain/usecases/job_usecases/commands"
+import (
+	"fmt"
+
+	"worker/internal/domain/entities"
+)
 
 type JobUsecases struct {
-	Commands
+	repo entities.JobRepository
 }
 
-type Commands struct {
-	RunJob commands.RunJobCommand
+func New(repo entities.JobRepository) (*JobUsecases, error) {
+	return &JobUsecases{
+		repo: repo,
+	}, nil
 }
 
-func NewJobUsecases() JobUsecases {
-	return JobUsecases{
-		Commands: Commands{
-			RunJob: commands.NewRunJobCommand(),
-		},
+func (u *JobUsecases) Create(actionID string, output []string) (string, error) {
+	job, err := entities.NewJob(u.repo.NextID(), entities.ActionID(actionID), output)
+	if err != nil {
+		return "", fmt.Errorf("failed to create job: %v", err)
 	}
+
+	err = u.repo.Create(*job)
+	if err != nil {
+		return "", fmt.Errorf("failed to create job: %v", err)
+	}
+	return string(job.Id), nil
 }

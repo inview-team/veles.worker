@@ -1,22 +1,23 @@
 package entities
 
 type Job struct {
-	Id             JobID
-	Type           JobType
-	Next           NextJob
-	InputTemplate  string
-	OutputTemplate string
+	Id       JobID
+	ActionID ActionID
+	Output   []string
 }
 
-type JobType int
 type JobID string
 
-type NextJob struct {
-	OnSuccess JobID
-	OnFailure JobID
+type JobRepository interface {
+	Create(job Job) error
+	GetByID(id string) (Job, error)
+	NextID() JobID
 }
 
-const (
-	HTTP JobType = iota + 1
-	Condition
-)
+func NewJob(id JobID, actionID ActionID, output []string) (*Job, error) {
+	return &Job{
+		Id:       id,
+		ActionID: actionID,
+		Output:   output,
+	}, nil
+}
