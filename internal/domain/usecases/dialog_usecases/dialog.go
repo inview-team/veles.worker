@@ -55,7 +55,7 @@ func (u *DialogUsecases) StartScenario(dialogID string, scenarioID string) error
 	return nil
 }
 
-func (u *DialogUsecases) Move(dialogId string) (string, error) {
+func (u *DialogUsecases) Move(dialogId string) (entities.JobOutput, error) {
 	dialog, err := u.repo.GetById(dialogId)
 	if err != nil {
 		return "", fmt.Errorf("failed move throw scenario: %v", err)
@@ -66,15 +66,33 @@ func (u *DialogUsecases) Move(dialogId string) (string, error) {
 		return "", fmt.Errorf("failed move throw scenario: %v", err)
 	}
 
-	currentJob, err := u.jRepo.GetByID(string(dialog.CurrentJobID))
+	for dialog.CurrentJobID != "" {
+		currentJob, err := u.jRepo.GetByID(string(dialog.CurrentJobID))
+		if err != nil {
+			return "", fmt.Errorf("failed move throw scenario: %v", err)
+		}
 
-	nextJobId, err := currentScenario.GetNextJob(currentJob.Id)
+		action, id := u.aRepo.GetByID(string(currentJob.ActionID))
+		switch currentJob.Type {
+		case entities.Get:
+			return action.Arguments, nil
+		case entities.Request:
+			return currentJob.Output, nil
+		case entities.Compare:
+			return false, currentJob
+		default:
+			return "", fmt.Errorf("failed move throw scenario: unknown job")
+
+		}
+	}
+
+	nextJobId, err := currentScenario.GetNextJob()
 	if err != nil {
 		return "", fmt.Errorf("failed move throw scenario: %v", err)
 	}
 	dialog.CurrentJobID = nextJobId
 	err = u.repo.Update(dialog)
 	if err != nil {
-		return fmt.Errorf("failed move throw scenario: %v", err)
+		return "", fmt.Errorf("failed move throw scenario: %v", err)
 	}
 }

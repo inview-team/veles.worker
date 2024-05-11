@@ -3,10 +3,10 @@ package entities
 import "fmt"
 
 type Scenario struct {
-	ID          ScenarioID
-	RootJobID   JobID
-	jobs        []JobID
-	JobSequence map[JobID]JobID
+	ID           ScenarioID
+	RootJobID    JobID
+	JobSequence  map[JobID]JobID
+	FinalMessage string
 }
 
 type ScenarioID string
@@ -18,11 +18,11 @@ type ScenarioRepository interface {
 	NextID() ScenarioID
 }
 
-func NewScenario(id ScenarioID, rootJobID JobID, jobs []JobID) (*Scenario, error) {
+func NewScenario(id ScenarioID, rootJobID JobID, jobs map[JobID]JobID) (*Scenario, error) {
 	return &Scenario{
-		ID:        id,
-		RootJobID: rootJobID,
-		jobs:      jobs,
+		ID:          id,
+		RootJobID:   rootJobID,
+		JobSequence: jobs,
 	}, nil
 }
 

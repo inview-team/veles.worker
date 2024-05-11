@@ -3,7 +3,6 @@ package entities
 type Action struct {
 	Id               ActionID
 	Type             ActionType
-	Arguments        map[string]Variable
 	AdditionalParams map[string]interface{}
 }
 
@@ -12,18 +11,10 @@ type ActionID string
 type ActionType int
 
 const (
-	HTTP ActionType = iota + 1
-	Compare
+	Input ActionType = iota + 1
+	Request
+	Validate
 )
-
-type Variable struct {
-	Value interface{}
-	Type  string
-}
-
-type Parameters struct {
-	HTTPRequest ``
-}
 
 type HTTPRequest struct {
 	Url     string

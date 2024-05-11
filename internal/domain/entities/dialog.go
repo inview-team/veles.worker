@@ -19,6 +19,12 @@ type DialogRepository interface {
 	NextID() DialogID
 }
 
+type DialogResult struct {
+	Argument        map[string]Variable
+	Output          map[string]Variable
+	IsNeedArguments bool
+}
+
 func NewDialog(id DialogID, clientID ClientID) (*Dialog, error) {
 	return &Dialog{
 		ID:           id,
