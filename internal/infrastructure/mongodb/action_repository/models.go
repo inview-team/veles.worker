@@ -1,12 +1,35 @@
 package action_repository
 
-import "go.mongodb.org/mongo-driver/bson/primitive"
+import (
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"worker/internal/domain/entities"
+)
 
 type Action struct {
-	ID               primitive.ObjectID `bson:"_id"`
-	Name             string             `bson:"name"`
-	Type             int                `bson:"type"`
-	Input            map[string]Variable
-	Output           map[string]Variable
-	AdditionalParams map[string]interface{}
+	ID               primitive.ObjectID           `bson:"_id"`
+	Name             string                       `bson:"name"`
+	Type             int                          `bson:"type"`
+	Input            map[string]entities.Variable `bson:"input"`
+	Output           []string                     `bson:"output"`
+	AdditionalParams map[string]interface{}       `bson:"additional_params"`
+}
+
+func (a *Action) ToEntity() (*entities.Action, error) {
+	return entities.NewAction(entities.ActionID(a.ID.Hex()), a.Name, entities.ActionType(a.Type), a.Input, a.Output, a.AdditionalParams)
+}
+
+func NewAction(action *entities.Action) (*Action, error) {
+	id, err := primitive.ObjectIDFromHex(string(action.Id))
+	if err != nil {
+		return nil, err
+	}
+
+	return &Action{
+		ID:               id,
+		Name:             action.Name,
+		Type:             int(action.Type),
+		Input:            action.Input,
+		Output:           action.Output,
+		AdditionalParams: action.AdditionalParams,
+	}, nil
 }

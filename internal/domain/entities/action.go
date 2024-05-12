@@ -1,16 +1,20 @@
 package entities
 
+import (
+	"context"
+	"errors"
+)
+
 type Action struct {
 	Id               ActionID
 	Name             string
 	Type             ActionType
 	Input            map[string]Variable
-	Output           map[string]Variable
+	Output           []string
 	AdditionalParams map[string]interface{}
 }
 
 type ActionID string
-
 type ActionType int
 
 const (
@@ -30,23 +34,23 @@ type HTTPRequest struct {
 	Body    map[string]interface{}
 }
 
-type CompareOperations int
-
-const (
-	Equal CompareOperations = iota + 1
-	More
-)
-
 type ActionRepository interface {
-	Create(action Action) error
-	GetByID(id string) (Action, error)
-	NextID() ActionID
+	Create(ctx context.Context, action *Action) error
+	GetByID(ctx context.Context, id string) (*Action, error)
+	NextID(ctx context.Context) ActionID
 }
 
-func NewAction(id ActionID, actionType ActionType, arguments map[string]Variable, params map[string]interface{}) (*Action, error) {
+func NewAction(id ActionID, name string, actionType ActionType, arguments map[string]Variable, output []string, params map[string]interface{}) (*Action, error) {
 	return &Action{
 		Id:               id,
+		Name:             name,
 		Type:             actionType,
+		Input:            arguments,
+		Output:           output,
 		AdditionalParams: params,
 	}, nil
 }
+
+var (
+	ErrActionNotFound = errors.New("action not found")
+)

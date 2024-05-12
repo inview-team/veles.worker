@@ -1,6 +1,11 @@
 package action_repository
 
 import (
+	"context"
+	"errors"
+	"fmt"
+
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"worker/internal/domain/entities"
@@ -21,16 +26,38 @@ func NewActionRepository(client *mongodb.DBClient) entities.ActionRepository {
 	}
 }
 
-func (a actionRepository) Create(action entities.Action) error {
-	//TODO implement me
-	panic("implement me")
+func (a actionRepository) Create(ctx context.Context, action *entities.Action) error {
+	mAction, err := NewAction(action)
+	if err != nil {
+		return fmt.Errorf("creating action got error: %v", err)
+	}
+
+	if _, err := a.coll.InsertOne(ctx, mAction); err != nil {
+		return fmt.Errorf("creating action got error: %v", err)
+	}
+	return nil
 }
 
-func (a actionRepository) GetByID(id string) (entities.Action, error) {
-	//TODO implement me
-	panic("implement me")
+func (a actionRepository) GetByID(ctx context.Context, id string) (*entities.Action, error) {
+	oID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, fmt.Errorf("finding action by id got err: %v", err)
+	}
+
+	f := bson.D{{"_id", oID}}
+	res := a.coll.FindOne(ctx, f)
+
+	var mAction Action
+	if err = res.Decode(&mAction); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return nil, entities.ErrActionNotFound
+		}
+		return nil, fmt.Errorf("finding action by id got error: %v", err)
+	}
+
+	return mAction.ToEntity()
 }
 
-func (a actionRepository) NextID() entities.ActionID {
+func (a actionRepository) NextID(_ context.Context) entities.ActionID {
 	return entities.ActionID(primitive.NewObjectID().Hex())
 }

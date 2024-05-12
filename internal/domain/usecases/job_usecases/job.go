@@ -2,6 +2,7 @@ package job_usecases
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -14,11 +15,11 @@ type JobUsecases struct {
 	aRepo entities.ActionRepository
 }
 
-func New(repo entities.JobRepository, aRepo entities.ActionRepository) (*JobUsecases, error) {
-	return &JobUsecases{
+func New(repo entities.JobRepository, aRepo entities.ActionRepository) JobUsecases {
+	return JobUsecases{
 		repo:  repo,
 		aRepo: aRepo,
-	}, nil
+	}
 }
 
 func (u *JobUsecases) Create(actions []entities.ActionInformation, output entities.JobOutput) (string, error) {
@@ -34,7 +35,7 @@ func (u *JobUsecases) Create(actions []entities.ActionInformation, output entiti
 	return string(job.Id), nil
 }
 
-func (u *JobUsecases) Run(jobId string, arguments map[string]entities.Variable) (entities.Output, error) {
+func (u *JobUsecases) Run(ctx context.Context, jobId string, arguments map[string]entities.Variable) (entities.Output, error) {
 	job, err := u.repo.GetByID(jobId)
 	if err != nil {
 		return entities.Output{}, fmt.Errorf("failed to run job: %v", err)
@@ -47,7 +48,7 @@ func (u *JobUsecases) Run(jobId string, arguments map[string]entities.Variable) 
 	}
 
 	for _, actionInfo := range job.Actions {
-		action, err := u.aRepo.GetByID(string(actionInfo.Id))
+		action, err := u.aRepo.GetByID(ctx, string(actionInfo.Id))
 		if err != nil {
 			return job.Output.OnFailure, fmt.Errorf("failed to run job: %v", err)
 		}
@@ -60,7 +61,7 @@ func (u *JobUsecases) Run(jobId string, arguments map[string]entities.Variable) 
 
 		switch action.Type {
 		case entities.Request:
-			result, err := u.executeHTTPAction(action)
+			result, err := u.executeHTTPAction(*action)
 			if err != nil {
 				return job.Output.OnFailure, fmt.Errorf("failed to run job: %v", err)
 			}

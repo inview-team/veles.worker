@@ -1,6 +1,7 @@
 package action_usecases
 
 import (
+	"context"
 	"fmt"
 
 	"worker/internal/domain/entities"
@@ -10,23 +11,23 @@ type ActionUsecases struct {
 	repo entities.ActionRepository
 }
 
-func New(repo entities.ActionRepository) (*ActionUsecases, error) {
-	return &ActionUsecases{repo: repo}, nil
+func New(repo entities.ActionRepository) ActionUsecases {
+	return ActionUsecases{repo: repo}
 }
 
-func (u *ActionUsecases) Register(actionType entities.ActionType, arguments map[string]entities.Variable, params map[string]interface{}) (string, error) {
-	action, err := entities.NewAction(u.repo.NextID(), actionType, arguments, params)
+func (u *ActionUsecases) Register(ctx context.Context, actionName string, actionType entities.ActionType, arguments map[string]entities.Variable, output []string, params map[string]interface{}) (string, error) {
+	action, err := entities.NewAction(u.repo.NextID(ctx), actionName, actionType, arguments, output, params)
 	if err != nil {
 		return "", fmt.Errorf("failed to register action: %v", err)
 	}
 
-	err = u.repo.Create(*action)
+	err = u.repo.Create(ctx, action)
 	if err != nil {
 		return "", fmt.Errorf("failed to register action: %v", err)
 	}
-	return "", err
+	return string(action.Id), err
 }
 
-func (u *ActionUsecases) GetByID(actionId string) (entities.Action, error) {
-	return u.repo.GetByID(actionId)
+func (u *ActionUsecases) GetByID(ctx context.Context, actionId string) (*entities.Action, error) {
+	return u.repo.GetByID(ctx, actionId)
 }
