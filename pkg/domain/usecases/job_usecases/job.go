@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"worker/internal/domain/entities"
+	"worker/pkg/domain/entities"
 )
 
 type JobUsecases struct {

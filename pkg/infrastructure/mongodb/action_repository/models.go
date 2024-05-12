@@ -2,7 +2,7 @@ package action_repository
 
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"worker/internal/domain/entities"
+	"worker/pkg/domain/entities"
 )
 
 type Action struct {

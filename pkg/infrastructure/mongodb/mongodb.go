@@ -6,7 +6,7 @@ import (
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"worker/internal/infrastructure/mongodb/common"
+	"worker/pkg/infrastructure/mongodb/common"
 )
 
 type DBClient struct {

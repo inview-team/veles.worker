@@ -8,9 +8,9 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	"worker/internal/domain/entities"
-	"worker/internal/infrastructure/mongodb"
-	"worker/internal/infrastructure/mongodb/common"
+	"worker/pkg/domain/entities"
+	"worker/pkg/infrastructure/mongodb"
+	"worker/pkg/infrastructure/mongodb/common"
 )
 
 type actionRepository struct {

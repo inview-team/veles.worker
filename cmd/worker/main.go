@@ -4,16 +4,16 @@ import (
 	"context"
 	"fmt"
 
-	"worker/internal/application/executor"
-	"worker/internal/domain/entities"
-	"worker/internal/infrastructure/mongodb"
+	"worker/pkg/application/executor"
+	"worker/pkg/domain/entities"
+	"worker/pkg/infrastructure/mongodb"
 )
 
 func main() {
 	ctx := context.Background()
 
 	cfg := mongodb.Config{
-		IP:         "...",
+		IP:         "192.168.0.143",
 		Port:       27017,
 		User:       "root",
 		Password:   "password",
@@ -66,12 +66,33 @@ func main() {
 
 	*/
 
-	id := "6640c6293e6146acb9d6a9a6"
+	id := "6640d74b84049cbd5e07a70c"
 	run, err := app.JobUseCases.Run(ctx, id, map[string]entities.Variable{
-		"token": {Type: "text", Value: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YWY0Yjg5My03NDlkLTQ4ZDAtODA1MS1iM2YzOTdhNWM0ZTAiLCJlbWFpbCI6Im10c3RydWV0ZWNoQGV4YW1wbGUuY29tIiwiZXhwIjoxNzE1NTA5Mzk3fQ.Nnt_3UVi7u8b4zXGW-dttX8mcpgArOp7t2fjdj08Pzg"},
+		"token":          {Type: "text", Value: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YWY0Yjg5My03NDlkLTQ4ZDAtODA1MS1iM2YzOTdhNWM0ZTAiLCJlbWFpbCI6Im10c3RydWV0ZWNoQGV4YW1wbGUuY29tIiwiZXhwIjoxNzE1NTMwNzQ1fQ.I9JaQIET0Yu41TnzhfvDl5eXwj9DfDqZW8_LHNKj3ZQ"},
+		"from_wallet_id": {Type: "text", Value: "6902fb11-9e7a-4a0d-aa45-de428ba48861"},
+		"to_wallet_id":   {Type: "text", Value: "214c4a21-52cb-409e-99cf-285c8b0fb676"},
+		"amount":         {Type: "number", Value: 100},
 	})
 	if err != nil {
 		fmt.Println(err)
 	}
 	fmt.Println(run)
+
+	/*
+		actions := []entities.ActionInformation{
+			{Id: "6640b20ea992c6f3eb368046", Output: []string{"id", "receiver_id"}},
+		}
+
+		output := entities.JobOutput{
+			Ask:       entities.Output{Message: "Provide arguments", Type: entities.Ask},
+			OnSuccess: entities.Output{Message: "Successful transfer money", Type: entities.Success},
+			OnFailure: entities.Output{Message: "Failed transfer money", Type: entities.Failure},
+		}
+
+		id, err := app.JobUseCases.Create(ctx, "Transfer Money", actions, output)
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Println(id)
+	*/
 }

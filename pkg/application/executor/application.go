@@ -3,11 +3,11 @@ package executor
 import (
 	"context"
 
-	"worker/internal/domain/usecases/action_usecases"
-	"worker/internal/domain/usecases/job_usecases"
-	"worker/internal/infrastructure/mongodb"
-	"worker/internal/infrastructure/mongodb/action_repository"
-	"worker/internal/infrastructure/mongodb/job_repository"
+	"worker/pkg/domain/usecases/action_usecases"
+	"worker/pkg/domain/usecases/job_usecases"
+	"worker/pkg/infrastructure/mongodb"
+	"worker/pkg/infrastructure/mongodb/action_repository"
+	"worker/pkg/infrastructure/mongodb/job_repository"
 )
 
 type App struct {

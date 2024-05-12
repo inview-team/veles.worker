@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"worker/internal/domain/entities"
+	"worker/pkg/domain/entities"
 )
 
 type ActionUsecases struct {
