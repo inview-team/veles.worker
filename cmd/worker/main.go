@@ -13,7 +13,7 @@ func main() {
 	ctx := context.Background()
 
 	cfg := mongodb.Config{
-		IP:         "192.168.0.143",
+		IP:         "...",
 		Port:       27017,
 		User:       "root",
 		Password:   "password",
