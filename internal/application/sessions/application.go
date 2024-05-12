@@ -3,15 +3,17 @@ package sessions
 import (
 	"context"
 
-	"worker/internal/domain/entities"
+	"worker/internal/domain/usecases/action_usecases"
 	"worker/internal/domain/usecases/dialog_usecases"
+	"worker/internal/domain/usecases/job_usecases"
 )
 
 type App struct {
-	Session dialog_usecases.DialogUsecases
+	Job    job_usecases.JobUsecases
+	Action action_usecases.ActionUsecases
 }
 
-func NewApp(ctx context.Context, sessionRepo entities.DialogRepository) (*App, error) {
+func NewApp(ctx context.Context) (*App, error) {
 	session := dialog_usecases.New(sessionRepo)
 	app := App{
 		Session: *session,

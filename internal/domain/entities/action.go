@@ -2,7 +2,10 @@ package entities
 
 type Action struct {
 	Id               ActionID
+	Name             string
 	Type             ActionType
+	Input            map[string]Variable
+	Output           map[string]Variable
 	AdditionalParams map[string]interface{}
 }
 
@@ -11,10 +14,14 @@ type ActionID string
 type ActionType int
 
 const (
-	Input ActionType = iota + 1
-	Request
+	Request ActionType = iota + 1
 	Validate
 )
+
+type Variable struct {
+	Value interface{}
+	Type  string
+}
 
 type HTTPRequest struct {
 	Url     string
@@ -36,10 +43,10 @@ type ActionRepository interface {
 	NextID() ActionID
 }
 
-func NewAction(id ActionID, actionType ActionType, arguments map[string]Variable) (*Action, error) {
+func NewAction(id ActionID, actionType ActionType, arguments map[string]Variable, params map[string]interface{}) (*Action, error) {
 	return &Action{
-		Id:        id,
-		Type:      actionType,
-		Arguments: arguments,
+		Id:               id,
+		Type:             actionType,
+		AdditionalParams: params,
 	}, nil
 }

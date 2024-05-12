@@ -1,25 +1,25 @@
 package entities
 
 type Job struct {
-	Id        JobID
-	Arguments []Variable
-	Actions   []ActionID
-	Output    JobOutput
+	Id      JobID
+	Name    string
+	Actions []ActionInformation
+	Output  JobOutput
 }
 
 type JobID string
-
 type JobType int
 
 type JobOutput struct {
-	Message  string
-	Type     OutputType
-	Variable Variable
+	Ask       Output
+	OnSuccess Output
+	OnFailure Output
 }
 
-type Variable struct {
-	Value interface{}
-	Type  string
+type Output struct {
+	Message  string
+	Type     OutputType
+	Variable map[string]Variable
 }
 
 type OutputType int
@@ -30,16 +30,21 @@ const (
 	Failure
 )
 
+type ActionInformation struct {
+	Id     ActionID
+	Output []string
+}
+
 type JobRepository interface {
 	Create(job Job) error
 	GetByID(id string) (Job, error)
 	NextID() JobID
 }
 
-func NewJob(id JobID, actionID ActionID, output []string) (*Job, error) {
+func NewJob(id JobID, actions []ActionInformation, output JobOutput) (*Job, error) {
 	return &Job{
-		Id:       id,
-		ActionID: actionID,
-		Output:   output,
+		Id:      id,
+		Actions: actions,
+		Output:  output,
 	}, nil
 }
