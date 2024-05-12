@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"worker/pkg/domain/entities"
+	"github.com/inview-team/veles.worker/pkg/domain/entities"
 )
 
 type JobUsecases struct {

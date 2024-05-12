@@ -3,11 +3,11 @@ package executor
 import (
 	"context"
 
-	"worker/pkg/domain/usecases/action_usecases"
-	"worker/pkg/domain/usecases/job_usecases"
-	"worker/pkg/infrastructure/mongodb"
-	"worker/pkg/infrastructure/mongodb/action_repository"
-	"worker/pkg/infrastructure/mongodb/job_repository"
+	"github.com/inview-team/veles.worker/pkg/domain/usecases/action_usecases"
+	"github.com/inview-team/veles.worker/pkg/domain/usecases/job_usecases"
+	"github.com/inview-team/veles.worker/pkg/infrastructure/mongodb"
+	"github.com/inview-team/veles.worker/pkg/infrastructure/mongodb/action_repository"
+	"github.com/inview-team/veles.worker/pkg/infrastructure/mongodb/job_repository"
 )
 
 type App struct {

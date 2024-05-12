@@ -5,12 +5,12 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/inview-team/veles.worker/pkg/domain/entities"
+	"github.com/inview-team/veles.worker/pkg/infrastructure/mongodb"
+	"github.com/inview-team/veles.worker/pkg/infrastructure/mongodb/common"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	"worker/pkg/domain/entities"
-	"worker/pkg/infrastructure/mongodb"
-	"worker/pkg/infrastructure/mongodb/common"
 )
 
 type jobRepository struct {

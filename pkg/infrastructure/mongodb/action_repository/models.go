@@ -1,8 +1,8 @@
 package action_repository
 
 import (
+	"github.com/inview-team/veles.worker/pkg/domain/entities"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"worker/pkg/domain/entities"
 )
 
 type Action struct {

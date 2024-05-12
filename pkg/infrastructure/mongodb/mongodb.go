@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/inview-team/veles.worker/pkg/infrastructure/mongodb/common"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"worker/pkg/infrastructure/mongodb/common"
 )
 
 type DBClient struct {

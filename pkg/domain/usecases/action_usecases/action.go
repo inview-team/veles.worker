@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"worker/pkg/domain/entities"
+	"github.com/inview-team/veles.worker/pkg/domain/entities"
 )
 
 type ActionUsecases struct {

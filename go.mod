@@ -1,4 +1,4 @@
-module worker
+module github.com/inview-team/veles.worker
 
 go 1.21.6
 

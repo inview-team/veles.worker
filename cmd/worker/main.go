@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"worker/pkg/application/executor"
-	"worker/pkg/domain/entities"
-	"worker/pkg/infrastructure/mongodb"
+	"github.com/inview-team/veles.worker/pkg/application/executor"
+	"github.com/inview-team/veles.worker/pkg/domain/entities"
+	"github.com/inview-team/veles.worker/pkg/infrastructure/mongodb"
 )
 
 func main() {
