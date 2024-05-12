@@ -53,7 +53,7 @@ func (u *JobUsecases) Run(ctx context.Context, jobId string, arguments map[strin
 		if err != nil {
 			return job.Output.OnFailure, fmt.Errorf("failed to run job: %v", err)
 		}
-		fmt.Printf("Execute action with id %s and with name %s ", action.Id, action.Name)
+		fmt.Printf("Execute action with id %s and with name %s \n", action.Id, action.Name)
 		for key, _ := range action.Input {
 			action.Input[key] = entities.Variable{Value: jobSpace[key]}
 		}
@@ -71,6 +71,7 @@ func (u *JobUsecases) Run(ctx context.Context, jobId string, arguments map[strin
 		default:
 			return job.Output.OnFailure, fmt.Errorf("failed to run job: unknown action")
 		}
+		fmt.Println(jobSpace)
 	}
 	return job.Output.OnSuccess, nil
 }
@@ -105,7 +106,7 @@ func (u *JobUsecases) executeHTTPAction(token string, action entities.Action) (m
 	}
 
 	parsedResponse := make(map[string]interface{})
-	err = json.NewDecoder(resp.Body).Decode(parsedResponse)
+	err = json.NewDecoder(resp.Body).Decode(&parsedResponse)
 	if err != nil {
 		return nil, fmt.Errorf("failed to execute http action: %v", err)
 	}
