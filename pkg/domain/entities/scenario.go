@@ -1,6 +1,14 @@
 package entities
 
-import "fmt"
+import (
+	"context"
+	"errors"
+	"fmt"
+)
+
+var (
+	ErrScenarioNotFound = errors.New("scenario not found")
+)
 
 type Scenario struct {
 	ID           ScenarioID
@@ -12,10 +20,10 @@ type Scenario struct {
 type ScenarioID string
 
 type ScenarioRepository interface {
-	Create(scenario Scenario) error
-	GetById(Id string) (Scenario, error)
-	Delete(Id string) (Scenario, error)
-	NextID() ScenarioID
+	Create(ctx context.Context, scenario *Scenario) error
+	GetById(ctx context.Context, Id string) (*Scenario, error)
+	Delete(ctx context.Context, Id string) (*Scenario, error)
+	NextID(ctx context.Context) ScenarioID
 }
 
 func NewScenario(id ScenarioID, rootJobID JobID, jobs map[JobID]JobID) (*Scenario, error) {
