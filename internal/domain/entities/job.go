@@ -1,5 +1,7 @@
 package entities
 
+import "context"
+
 type Job struct {
 	Id      JobID
 	Name    string
@@ -36,14 +38,15 @@ type ActionInformation struct {
 }
 
 type JobRepository interface {
-	Create(job Job) error
-	GetByID(id string) (Job, error)
-	NextID() JobID
+	Create(ctx context.Context, job *Job) error
+	GetByID(ctx context.Context, id string) (*Job, error)
+	NextID(ctx context.Context) JobID
 }
 
-func NewJob(id JobID, actions []ActionInformation, output JobOutput) (*Job, error) {
+func NewJob(id JobID, name string, actions []ActionInformation, output JobOutput) (*Job, error) {
 	return &Job{
 		Id:      id,
+		Name:    name,
 		Actions: actions,
 		Output:  output,
 	}, nil
