@@ -73,7 +73,11 @@ func (u *JobUsecases) Run(ctx context.Context, jobId string, arguments map[strin
 		}
 		fmt.Println(jobSpace)
 	}
-	return job.Output.OnSuccess, nil
+	output := job.Output.OnSuccess.Variable
+	for key, value := range output {
+		output[key] = entities.Variable{Type: value.Type, Value: jobSpace[key]}
+	}
+	return entities.Output{Message: job.Output.OnSuccess.Message, Type: entities.Success, Variable: output}, nil
 }
 
 func (u *JobUsecases) executeHTTPAction(token string, action entities.Action) (map[string]entities.Variable, error) {

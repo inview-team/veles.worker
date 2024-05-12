@@ -1,0 +1,28 @@
+{
+    "_id": {
+      "$oid": "6640ae3412f4c109e563dd60"
+    },
+    "name": "Get Balance",
+    "actions": [
+      {
+        "id": {
+          "$oid": "6640ae3412f4c109e563dd60"
+        },
+        "output": [
+          "id"
+        ]
+      }
+    ],
+    "output": {
+      "onsuccess": {
+        "message": "Successfully get balance",
+        "type": 2,
+        "variable": null
+      },
+      "onfailure": {
+        "message": "Failed to get balance",
+        "type": 3,
+        "variable": null
+      }
+    }
+  }
